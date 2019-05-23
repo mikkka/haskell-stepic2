@@ -10,3 +10,11 @@ instance Functor (Arr2 e1 e2) where
 instance Functor (Arr3 e1 e2 e3) where
   fmap f = Arr3 . (fmap . fmap . fmap $ f) . getArr3
 --  fmap f (Arr3 g) = Arr3 (\e1 e2 e3 -> f $ g e1 e2 e3)
+
+instance Applicative (Arr2 e1 e2) where
+  pure x = Arr2 (\e1 e2 -> x)
+  (<*>) (Arr2 arrF) (Arr2 arrX) = Arr2 (\e1 e2 -> (arrF e1 e2) (arrX e1 e2)) 
+
+instance Applicative (Arr3 e1 e2 e3) where
+  pure x = Arr3 (\e1 e2 e3 -> x)
+  (<*>) (Arr3 arrF) (Arr3 arrX) = Arr3 (\e1 e2 e3 -> (arrF e1 e2 e3) (arrX e1 e2 e3)) 
