@@ -1,4 +1,4 @@
-module Prs where 
+module Prs where  
 
 import Control.Applicative
 
@@ -24,3 +24,6 @@ anyChr :: Prs Char
 anyChr = Prs (\s -> 
   case s of [] -> Nothing
             (x:xs) -> Just (x, xs))
+
+many1 :: Prs a -> Prs [a]
+many1 p = (:) <$> p <*> many p 
