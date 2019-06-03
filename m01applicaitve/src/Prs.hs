@@ -1,6 +1,7 @@
 module Prs where  
 
 import Control.Applicative
+import Data.Char
 
 newtype Prs a = Prs { runPrs :: String -> Maybe (a, String) }
 instance Functor Prs where
@@ -27,3 +28,17 @@ anyChr = Prs (\s ->
 
 many1 :: Prs a -> Prs [a]
 many1 p = (:) <$> p <*> many p 
+
+char :: Char -> Prs Char
+char c = Prs (\s -> 
+  case s of [] -> Nothing
+            (x:xs) -> if x == c then Just (x, xs) else Nothing)
+
+nat :: Prs Int
+nat = Prs(\s -> 
+  case span isDigit s of ([], tail) -> Nothing
+                         (digits, tail) -> Just (read digits, tail)
+  )
+
+mult :: Prs Int
+mult = (*) <$> nat <* char '*' <*> nat            
