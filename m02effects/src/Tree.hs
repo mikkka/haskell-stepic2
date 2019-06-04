@@ -10,6 +10,14 @@ instance Foldable Tree where
   foldr _ ini Nil = ini
   foldr f ini (Branch l x r) = foldr f (f x (foldr f ini r)) l
 
+instance Functor Tree where
+  fmap _ Nil = Nil
+  fmap f (Branch l x r) = Branch (f <$> l) (f x) (f <$> r)
+
+instance Traversable Tree where
+  traverse _ Nil = pure Nil
+  traverse f (Branch l x r) = Branch <$> traverse f l <*> f x <*> traverse f r
+
 instance Foldable Preorder where
   foldr _ ini (PreO Nil) = ini
   foldr f ini (PreO (Branch l x r)) = f x (foldr f (foldr f ini (PreO r)) (PreO l))
