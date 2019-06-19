@@ -16,8 +16,3 @@ instance Traversable Tree where
 instance Functor Tree where
   fmap _ Nil = Nil
   fmap f (Branch l x r) = Branch (f <$> l) (f x) (f <$> r)
-
-flip2 :: (a -> b -> c -> d) -> a -> c -> b -> d
-flip2 f a b c = f a c b
-
-testTree = Branch (Branch (Branch Nil 1 Nil) 2 (Branch Nil 3 Nil)) 4 (Branch Nil 5 Nil)
