@@ -1,21 +1,56 @@
-name:                m03effects
-version:             0.1.0.0
--- synopsis:
--- description:
-homepage:            https://github.com/githubuser/m03effects#readme
-license:             BSD3
-license-file:        LICENSE
-author:              Author name here
-maintainer:          example@example.com
-copyright:           2019 Author name here
-category:            Web
-build-type:          Simple
-cabal-version:       >=1.10
-extra-source-files:  README.md
+cabal-version: 1.12
 
-executable m03effects
-  hs-source-dirs:      src
-  main-is:             Main.hs
-  default-language:    Haskell2010
-  build-depends:       base >= 4.7 && < 5,
-                       transformers
+-- This file has been generated from package.yaml by hpack version 0.31.2.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 83fc75465061afd1728b99ba2b8a00e7fc7f760b8562339846007491602a6686
+
+name:           m03effects
+version:        0.1.0.0
+description:    study project
+homepage:       https://github.com/mikkka/m03effects#readme
+bug-reports:    https://github.com/mikkka/m03effects/issues
+author:         Michael T
+maintainer:     michael.tkachev@gmail.com
+copyright:      2020 Michael T
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+
+source-repository head
+  type: git
+  location: https://github.com/mikkka/m03effects
+
+library
+  exposed-modules:
+      Checkpoint
+      CPSDecode
+      Except
+      ListIdx
+      ReadExcept
+      ShowCont
+      SumExcept
+  other-modules:
+      Paths_m03effects
+  hs-source-dirs:
+      src
+  build-depends:
+      base >=4.7 && <5
+    , transformers
+  default-language: Haskell2010
+
+executable helloworld-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_m03effects
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , m03effects
+    , transformers
+  default-language: Haskell2010
