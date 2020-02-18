@@ -34,8 +34,12 @@ instance Monad (Except e) where
       Right x  -> f x
 
 instance Monoid e => Alternative (Except e) where
-  empty                 = Except $ Left mempty 
-  Except (Left _) <|> n = n
-  m               <|> _ = m
+  empty = mzero 
+  (<|>) = mplus
 
 instance Monoid e => MonadPlus (Except e) where
+  mzero                     = throwE mempty 
+  Except x `mplus` Except y = Except $ 
+    case x of
+      Left e -> either (Left . mappend e) Right y
+      r      -> r

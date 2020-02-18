@@ -1,30 +1,7 @@
 module Checkpoint where
 
-newtype Cont r a = Cont {runCont :: (a -> r) -> r}
+import Cont
 
-instance Functor (Cont r) where
-  fmap f x = (pure f) <*> x
-
-instance Applicative (Cont r) where
-  pure = return
-  af <*> av = do
-    f <- af
-    v <- av
-    return (f v)
-
-instance Monad (Cont r) where
-  -- return :: a -> Cont r a
-  return x = Cont $ \c -> c x
-
-  -- (>>=) :: Cont r a -> (a -> Cont r b) -> Cont r b
-  Cont v >>= k = Cont $ \c -> v (\a -> runCont (k a) c)
-
-type Checkpointed r = (r -> Cont r Bool) -> Cont r r
--- type Checkpointed a = (a -> Cont a Int) -> Cont a a
-
-runCheckpointed :: (a -> Bool) -> Checkpointed a -> a
-runCheckpointed pred check = undefined
-  
 addTens :: Int -> Checkpointed Int
 addTens x1 = \checkpoint -> do
   checkpoint x1
@@ -35,16 +12,20 @@ addTens x1 = \checkpoint -> do
   let x4 = x3 + 10
   return x4         {- x4 = x1 + 30 -}
 
-res31 :: Int
-res31 = runCheckpointed (< 100) $ addTens 1
--- res21 = runCheckpointed  (< 30) $ addTens 1
--- res11 = runCheckpointed  (< 20) $ addTens 1
--- res01 = runCheckpointed  (< 10) $ addTens 1
+type Checkpointed a = (a -> Cont a a) -> Cont a a
 
+runCheckpointed :: (a -> Bool) -> Checkpointed a -> a
+runCheckpointed pred check = runCont (check newCont) id where 
+  newCont x = Cont $ \c -> let y = c x in 
+    if not $ pred y then x else y
 
-sumIt :: Cont Int Int
-sumIt = do
-  a <- return 3
-  -- b <- Cont $ \c -> 1488
-  b <- return 8 
-  return $ a + b
+-- key thought to the solution
+addTensS :: Int -> (Int -> Bool) -> Cont Int Int
+addTensS x1 pred = do
+  Cont $ (\c -> if not (pred (c x1)) then x1 else c x1)
+  let x2 = x1 + 10
+  Cont $ (\c -> if not (pred (c x2)) then x2 else c x2)
+  let x3 = x2 + 10
+  Cont $ (\c -> if not (pred (c x3)) then x3 else c x3)
+  let x4 = x3 + 10
+  return x4

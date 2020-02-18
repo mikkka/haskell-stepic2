@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 83fc75465061afd1728b99ba2b8a00e7fc7f760b8562339846007491602a6686
+-- hash: f2655b6af2ac810af5052f734be40c7bb0fdb5d145fb6d1e031e06571f393caa
 
 name:           m03effects
 version:        0.1.0.0
@@ -27,7 +27,9 @@ source-repository head
 library
   exposed-modules:
       Checkpoint
+      Cont
       CPSDecode
+      CPSSample
       Except
       ListIdx
       ReadExcept

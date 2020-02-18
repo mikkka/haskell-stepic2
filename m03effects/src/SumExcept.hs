@@ -22,7 +22,7 @@ trySum2 xs = sum <$> traverse (\(i, s) -> withExcept (SumError i) $ tryRead s) (
 
 newtype Validate e a = Validate {getValidate :: Either [e] a}
 instance Functor (Validate e) where
-  fmap f x = pure f <*> x
+  fmap f x = f <$> x
 
 instance Applicative (Validate e) where
   pure = Validate . Right
