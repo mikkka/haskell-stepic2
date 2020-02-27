@@ -38,6 +38,9 @@ toFailCont ex = FailCont $ \ok err ->
 evalFailCont :: FailCont (Either e a) e a -> Either e a
 evalFailCont cont = runFailCont cont Right Left
 
+callCFC :: ((a -> FailCont r e b) -> FailCont r e a) -> FailCont r e a
+callCFC f = FailCont $ 
+            \ok err -> runFailCont (f $ \a -> FailCont $ \_ _ -> ok a) ok err
 
 --------- compose on functions --------------------
 
