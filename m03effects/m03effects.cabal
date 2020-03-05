@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 59167248e7bbc4a41e33c06bc52a9d8666095732039688681fbb4960ff34adfb
+-- hash: 2c66bde5b12b442e1061ab85286ab6e7055d63013d53c57896d397c7fac5afef
 
 name:           m03effects
 version:        0.1.0.0
@@ -34,14 +34,19 @@ library
       FailCont
       ListIdx
       ReadExcept
+      Recurrent
+      Recurrent2
       ShowCont
       SumExcept
+      Transformers
+      Transformers2
   other-modules:
       Paths_m03effects
   hs-source-dirs:
       src
   build-depends:
       base >=4.7 && <5
+    , mtl
     , transformers
   default-language: Haskell2010
 
@@ -55,5 +60,6 @@ executable helloworld-exe
   build-depends:
       base >=4.7 && <5
     , m03effects
+    , mtl
     , transformers
   default-language: Haskell2010
