@@ -1,6 +1,8 @@
 module WriterT where
 import Control.Applicative
 import Data.Tuple
+import MonadTrans
+import Data.Functor.Identity
 
 newtype WriterT w m a = WriterT { runWriterT :: m (a, w) }
 
@@ -26,3 +28,25 @@ instance (Monad m, Monoid w) => Monad (WriterT w m) where
     return (v'', mappend x1 x2)
   fail = WriterT . fail
  
+instance (Monoid w) => MonadTrans (WriterT w) where
+  lift m = WriterT $ do 
+    x <- m
+    return (x, mempty)
+
+tell :: Monad m => w -> WriterT w m ()
+tell w = writer ((), w)
+
+listen :: Monad m => WriterT w m a -> WriterT w m (a, w)
+listen m = WriterT $ do
+  ~(a, w) <- runWriterT m
+  return ((a, w), w)
+
+censor :: Monad m => (w -> w) -> WriterT w m a -> WriterT w m a
+censor f m = WriterT $ do
+  ~(a, w) <- runWriterT m
+  return (a, f w)
+
+type Writer w = WriterT w Identity
+
+runWriter :: Writer w a -> (a, w)
+runWriter = runIdentity . runWriterT
