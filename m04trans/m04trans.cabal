@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 6f9eefd761c58a74373e61e7d0e2871323ea49ca3db23a11fa60ce1c7d67750a
+-- hash: 8072b6bb34ef67f2feaea2d5a314fef6c6f9ddbfb1d90bcc06b3e9f75688dbcc
 
 name:           m04trans
 version:        0.1.0.0
@@ -26,10 +26,12 @@ source-repository head
 
 library
   exposed-modules:
+      ExceptT
       LoggT
       MonadTrans
       ReaderT
       StateT
+      TileGame
       Tree
       WriterT
   other-modules:
