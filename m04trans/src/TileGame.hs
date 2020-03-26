@@ -15,8 +15,10 @@ data DeathReason = Fallen | Poisoned
 type Point = (Integer, Integer)
 type GameMap = Point -> Tile
 
+type M = ExceptT DeathReason [] Point
+
 moves :: GameMap -> Int -> Point -> [Either DeathReason Point]
-moves map cnt start = runExceptT $ moveManyE map cnt start
+moves map cnt start = runExceptT $ moveManyES map cnt start
   
 waysToDie :: DeathReason -> GameMap -> Int -> Point -> Int
 waysToDie dr map cnt start = 
@@ -36,10 +38,19 @@ move1E map (x,y) = do
       Chasm -> Left Fallen 
       Floor -> Right (x,y)
 
-moveManyE :: GameMap -> Int -> Point -> ExceptT DeathReason [] Point
+moveManyE :: GameMap -> Int -> Point -> M
 moveManyE map cnt start = 
   return start >>= foldr (<=<) return (replicate cnt $ move1E map)
 
+moveManyES :: GameMap -> Int -> Point -> M 
+moveManyES map cnt start = go cnt $ pure start
+  where 
+    go :: Int -> M -> M 
+    go left from = 
+      if left == 0 then from  
+      else do
+        pt <- from
+        go (left - 1) (move1E map pt)
 
 map1 :: GameMap
 map1 (2, 2) = Snake
