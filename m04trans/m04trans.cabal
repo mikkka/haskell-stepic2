@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: b9028321bae894a0ad49e4761b256b5ee091382152b7f4080a42d07c8a01ab93
+-- hash: 27365f1609f3a376828e0cf63d359c73a1453fe4f7dfa57e086eba42ff3c044a
 
 name:           m04trans
 version:        0.1.0.0
@@ -34,6 +34,7 @@ library
       StateT
       TileGame
       Tree
+      TryRead
       WriterT
   other-modules:
       Paths_m04trans
