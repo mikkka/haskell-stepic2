@@ -3,6 +3,7 @@ module StateT where
 import MonadTrans
 import ReaderT
 import Control.Applicative
+import Data.Functor.Identity
 
 newtype StateT s m a = StateT { runStateT :: s -> m (a,s) }
 
@@ -58,3 +59,6 @@ execStateT st s = snd <$> runStateT st s
 readerToStateT :: Monad m => ReaderT r m a -> StateT r m a
 readerToStateT rdr = StateT $ \s -> (\a -> (a,s)) <$> runReaderT rdr s
 
+type State s = StateT s Identity
+
+runState m s = runIdentity $ runStateT m s

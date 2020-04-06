@@ -9,8 +9,8 @@ newtype WriterT w m a = WriterT { runWriterT :: m (a, w) }
 writer :: Monad m => (a, w) -> WriterT w m a
 writer = WriterT . return 
 
-execWriter :: Monad m => WriterT w m a -> m w
-execWriter = fmap snd . runWriterT
+execWriterT :: Monad m => WriterT w m a -> m w
+execWriterT = fmap snd . runWriterT
 
 instance Functor m => Functor (WriterT w m) where
   fmap f = WriterT . fmap updater . runWriterT

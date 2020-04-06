@@ -37,3 +37,5 @@ local :: (r -> r) -> ReaderT r m a -> ReaderT r m a
 local f rdr = ReaderT $ runReaderT rdr . f
 
 type Reader e = ReaderT e Identity
+
+runReader m r = runIdentity $ runReaderT m r 
