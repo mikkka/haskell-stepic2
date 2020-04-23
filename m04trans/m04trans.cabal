@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: b8b7d099c8659061edc088108951c5b3bf744c20794f60369d77ffdf72fac7f5
+-- hash: 11954120ad98f907bf6fa47b0a29b88f3c78106c6f07f226964499b2356ab97d
 
 name:           m04trans
 version:        0.1.0.0
@@ -34,11 +34,14 @@ library
       MonadTrans
       ReaderClass
       ReaderT
+      Runz
       StateClass
       StateT
       TileGame
       Tree
+      Tree2
       TryRead
+      TryRead2
       Writer
       WriterClass
       WriterT
