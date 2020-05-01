@@ -7,13 +7,7 @@ import Control.Monad.Except
 import Control.Monad.State
 import Data.Foldable
 
-runLimited1 :: (s -> Bool) -> [State s a] -> s -> (Either Int [a], s)
-runLimited1 p fs s = run1 (limited p fs) s
-
-runLimited2 :: (s -> Bool) -> [State s a] -> s -> Either Int ([a], s)
-runLimited2 p fs s = run2 (limited p fs) s
-
-limited :: (MonadState s m, MonadError Int m) => (s -> Bool) -> [State s a] -> m [a]
+limited :: (MonadState s m, MonadError e m, Num e, Enum e) => (s -> Bool) -> [State s a] -> m [a]
 limited p fs = traverse limit1 (zip [0..] fs)
   where
     limit1 (i, f) = do
@@ -22,7 +16,17 @@ limited p fs = traverse limit1 (zip [0..] fs)
       when stateIsBad $ throwError i
       pure a
 
-run1 :: (MonadState s m, MonadError Int m) => m [a] -> s -> (Either Int [a], s)
-run1 = undefined
+runLimited1 :: (s -> Bool) -> [State s a] -> s -> (Either Int [a], s)
+runLimited1 p fs = run1 (limited p fs)
 
--- run2 = undefined
+runLimited2 :: (s -> Bool) -> [State s a] -> s -> Either Int ([a], s)
+runLimited2 p fs = run2 (limited p fs)
+
+type RUNES s = ExceptT Int (State s) 
+type RUNSE s = StateT s (Except Int) 
+
+run1 :: RUNES s [a] -> s -> (Either Int [a], s)
+run1 x = runState $ runExceptT x
+
+run2 :: RUNSE s [a] -> s -> Either Int ([a], s)
+run2 x s = runExcept $ runStateT x s
